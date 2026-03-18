@@ -4,8 +4,18 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 import fetch from "node-fetch";
 
+const app = express(); // ✅ THIẾU DÒNG NÀY
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const PORT = process.env.PORT || 8080;
 const API_KEY = process.env.API_KEY;
 
+app.use(cors());
+app.use(express.json());
+
+// ✅ API chatbot
 app.post("/chat", async (req, res) => {
   try {
     const message = req.body.message;
@@ -24,13 +34,15 @@ app.post("/chat", async (req, res) => {
     const data = await response.json();
 
     res.json({
-      reply: data.candidates?.[0]?.content?.parts?.[0]?.text
+      reply: data.candidates?.[0]?.content?.parts?.[0]?.text || "No response"
     });
 
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Server error" });
   }
 });
+
 // Serve frontend
 app.use(express.static(path.join(__dirname, "dist")));
 
