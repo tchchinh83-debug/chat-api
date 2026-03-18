@@ -13,13 +13,14 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 8080;
 
-// Serve React build
+// Serve static files
 app.use(express.static(path.join(__dirname, "dist")));
 
-app.get("*", (req, res) => {
+// Catch-all (FIX CHUẨN)
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
-app.listen(port, "0.0.0.0", () => {
-  console.log("Server running on port", port);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log("Server running on port", PORT);
 });
