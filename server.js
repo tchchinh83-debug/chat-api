@@ -21,7 +21,7 @@ app.post("/chat", async (req, res) => {
     const message = req.body.message;
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -32,9 +32,11 @@ app.post("/chat", async (req, res) => {
     );
 
     const data = await response.json();
-
+    console.log(JSON.stringify(data, null, 2));
     res.json({
-      reply: data.candidates?.[0]?.content?.parts?.[0]?.text || "No response"
+  reply:
+    data.candidates?.[0]?.content?.parts?.[0]?.text ||
+    JSON.stringify(data)
     });
 
   } catch (err) {
